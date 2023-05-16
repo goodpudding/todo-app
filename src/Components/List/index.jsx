@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Stack, Checkbox } from "@mantine/core";
+import { Button, Stack, Checkbox, Card } from "@mantine/core";
 
 const List = ({ list, toggleComplete, deleteItem }) => {
   const incompleteItems = list.filter((item) => !item.complete);
@@ -7,7 +7,8 @@ const List = ({ list, toggleComplete, deleteItem }) => {
   return (
     <Stack spacing="md">
       {incompleteItems.map((item) => (
-        <div key={item.id}>
+        <div key={item.id} className="listItem">
+          <Card>
           <p>{item.text}</p>
           <p>
             <small>Assigned to: {item.assignee}</small>
@@ -29,7 +30,7 @@ const List = ({ list, toggleComplete, deleteItem }) => {
           >
             Delete Item
           </Button>
-          <hr />
+          </Card>
         </div>
       ))}
     </Stack>
