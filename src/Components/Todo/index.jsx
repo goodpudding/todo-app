@@ -1,33 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import useForm from "../../hooks/form";
 import { Button, TextInput, Pagination } from "@mantine/core";
 import { v4 as uuid } from "uuid";
+import { SettingsContext } from "../../Context/Settings";
 
-import List from './List';
+import List from "../List/index";
 
 const Todo = () => {
+  const settings = useContext(SettingsContext);
   const [defaultValues] = useState({ difficulty: 4 });
   const [list, setList] = useState([]);
-  const [currentPosition, setCurrentPosition] = useState(0);
+  const [currentPosition, setCurrentPosition] = useState(1);
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
 
-  const paginate = (items, currentPosition, numberToDisplay) => {
-    return items.slice(currentPosition, numberToDisplay);
-  }
+  const paginate = (items, page, itemsPerPage) => {
+    // calculate start and end index
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    return items.slice(start, end);
+  };
 
   const increasePagination = () => {
-    setCurrentPosition((currentPosition + settings.itemsToDisplay) -1);
-  }
+    setCurrentPosition(currentPosition + settings.itemsToDisplay);
+  };
 
   const calculateTotal = () => {
     return Math.ceil(list.length / settings.itemsToDisplay);
-  }
+  };
 
   function addItem(item) {
     item.id = uuid();
     item.complete = false;
-    console.log(item);
+    console.log(item.text);
     setList([...list, item]);
   }
 
@@ -55,6 +61,14 @@ const Todo = () => {
     // disable code used to avoid linter warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
+  const [incompleteItems, setIncompleteItems] = useState([]);
+
+  useEffect(() => {
+    setIncompleteItems(list.filter((item) => !item.complete));
+  }, [list]);
+  const sortedItems = [...incompleteItems].sort(
+    (a, b) => b.difficulty - a.difficulty
+  );
 
   return (
     <>
@@ -106,17 +120,20 @@ const Todo = () => {
         </label>
       </form>
 
-      {paginate(list, currentPosition, settings.itemsToDisplay).map(item => (
-        <div key={item.id}>
-          <p>{item.id}</p>
-          <p><small>Assignt to: {item.assignee}</small></p>
-          <p><small>Difficulty: {item.difficulty}</small></p>
-          <div onClick={() => toggleComplete(item.id)}>Complete: {item.complete.toString()}</div>
-          <hr /> 
-        </div>
-      ))}
-      
-      <Pagination onChange={increasePagination} total={calculateTotal()} color="indigo" size="lg" radius="md"/>
+      <List
+        list={paginate(sortedItems, currentPosition, settings.itemsToDisplay)}
+        toggleComplete={toggleComplete}
+        deleteItem={deleteItem}
+      />
+
+      <Pagination
+        onChange={(page) => setCurrentPosition(page)}
+        total={Math.ceil(sortedItems.length / settings.itemsToDisplay)}
+        color="indigo"
+        size="lg"
+        radius="md"
+        initialPage={currentPosition}
+      />
     </>
   );
 };

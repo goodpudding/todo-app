@@ -1,15 +1,22 @@
 import React from 'react';
-import { Button, Stack, Text, Checkbox } from '@mantine/core';
+import { Button, Stack, Checkbox } from '@mantine/core';
 
 const List = ({ list, toggleComplete, deleteItem }) => {
+const incompleteItems = list.filter(item => !item.complete);
+
+
   return (
     <Stack spacing="md">
-      {list.map((item) => (
+      {incompleteItems.map((item) => (
         <div key={item.id}>
-          <Text>{item.text}</Text>
-          <Text><small>Assigned to: {item.assignee}</small></Text>
-          <Text><small>Difficulty: {item.difficulty}</small></Text>
-          <Checkbox checked={toggleComplete} onChange={(event) => setChecked(event.currentTarget.toggleComplete)} label= "Complete" />     
+          <p>{item.text}</p>
+          <p><small>Assigned to: {item.assignee}</small></p>
+          <p><small>Difficulty: {item.difficulty}</small></p>
+          <Checkbox 
+            checked={item.complete} 
+            onChange={() => toggleComplete(item.id)} 
+            label="Complete" 
+          />     
           <Button
             type="button"
             onClick={() => deleteItem(item.id)}
