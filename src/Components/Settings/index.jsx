@@ -16,18 +16,11 @@ function Settings() {
     <div>
       <h1>Settings</h1>
       <TextInput
-        label="User Name"
+        label="How many tasks per page would you like to display?"
         placeholder="Enter your name"
-        value={settings.userName}
+        value={settings.itemsToDisplay}
         onChange={handleChange}
-        name="userName"
-      />
-      <TextInput
-        label="Email"
-        placeholder="Enter your email"
-        value={settings.email}
-        onChange={handleChange}
-        name="email"
+        name="itemsToDisplay"
       />
       <Button onClick={() => alert('Settings Saved!')}>Save Settings</Button>
     </div>

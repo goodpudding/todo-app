@@ -12,17 +12,14 @@ function App() {
       <ThemeProvider>
         <SettingsProvider>
           <div className="App">
-          {/* <ul className="Nav-header">
+          <ul className="Nav-header">
               <li>
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about">About Us</Link>
+                <Link to="/settings">Settings</Link>
               </li>
-              <li>
-                <Link to="/contact">Contact Us</Link>
-              </li>
-            </ul> */}
+            </ul>
           <BrowserRouter>
           
             <Routes>
