@@ -8,11 +8,21 @@ import List from './List';
 const Todo = () => {
   const [defaultValues] = useState({ difficulty: 4 });
   const [list, setList] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState(0);
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const paginate = (items, currentPosition, numberToDisplay) => {
+    return items.slice(currentPosition, numberToDisplay);
+  }
+
+  const increasePagination = () => {
+    setCurrentPosition((currentPosition + settings.itemsToDisplay) -1);
+  }
+
+  const calculateTotal = () => {
+    return Math.ceil(list.length / settings.itemsToDisplay);
+  }
 
   function addItem(item) {
     item.id = uuid();
@@ -45,11 +55,6 @@ const Todo = () => {
     // disable code used to avoid linter warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -81,14 +86,6 @@ const Todo = () => {
           name="assignee"
           onChange={handleChange} // Add this line
         />
-        {/* <label>
-          <span>Assigned To</span>
-          <input
-            onChange={handleChange}
-            name="assignee"
-            placeholder="Assignee Name"
-          />
-        </label> */}
 
         <label>
           <span>Difficulty</span>
@@ -109,15 +106,17 @@ const Todo = () => {
         </label>
       </form>
 
-      <List list={currentItems} toggleComplete={toggleComplete} deleteItem={deleteItem} />
-
-      <Pagination 
-        total={list.length}
-        perPage={itemsPerPage}
-        initialPage={1}
-        color="teal"
-        onChange={paginate}
-      />
+      {paginate(list, currentPosition, settings.itemsToDisplay).map(item => (
+        <div key={item.id}>
+          <p>{item.id}</p>
+          <p><small>Assignt to: {item.assignee}</small></p>
+          <p><small>Difficulty: {item.difficulty}</small></p>
+          <div onClick={() => toggleComplete(item.id)}>Complete: {item.complete.toString()}</div>
+          <hr /> 
+        </div>
+      ))}
+      
+      <Pagination onChange={increasePagination} total={calculateTotal()} color="indigo" size="lg" radius="md"/>
     </>
   );
 };

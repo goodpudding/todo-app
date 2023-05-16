@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Stack, Text } from '@mantine/core';
+import { Button, Stack, Text, Checkbox } from '@mantine/core';
 
 const List = ({ list, toggleComplete, deleteItem }) => {
   return (
@@ -9,9 +9,7 @@ const List = ({ list, toggleComplete, deleteItem }) => {
           <Text>{item.text}</Text>
           <Text><small>Assigned to: {item.assignee}</small></Text>
           <Text><small>Difficulty: {item.difficulty}</small></Text>
-          <div onClick={() => toggleComplete(item.id)}>
-            Complete: {item.complete.toString()}
-          </div>
+          <Checkbox checked={toggleComplete} onChange={(event) => setChecked(event.currentTarget.toggleComplete)} label= "Complete" />     
           <Button
             type="button"
             onClick={() => deleteItem(item.id)}
