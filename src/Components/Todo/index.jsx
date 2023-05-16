@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import useForm from "../../hooks/form";
-import { Button, TextInput } from "@mantine/core";
-
+import { Button, TextInput, Pagination } from "@mantine/core";
 import { v4 as uuid } from "uuid";
 
+import List from './List';
+
 const Todo = () => {
-  const [defaultValues] = useState({
-    difficulty: 4,
-  });
+  const [defaultValues] = useState({ difficulty: 4 });
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   function addItem(item) {
     item.id = uuid();
@@ -43,6 +45,11 @@ const Todo = () => {
     // disable code used to avoid linter warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = list.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -72,7 +79,7 @@ const Todo = () => {
           size="md"
           withAsterisk
           name="assignee"
-
+          onChange={handleChange} // Add this line
         />
         {/* <label>
           <span>Assigned To</span>
@@ -102,30 +109,15 @@ const Todo = () => {
         </label>
       </form>
 
-      {list.map((item) => (
-        <div key={item.id}>
-          <p>{item.text}</p>
-          <p>
-            <small>Assigned to: {item.assignee}</small>
-          </p>
-          <p>
-            <small>Difficulty: {item.difficulty}</small>
-          </p>
-          <div onClick={() => toggleComplete(item.id)}>
-            Complete: {item.complete.toString()}
-          </div>
-          <Button
-            type="button"
-            onClick={() => deleteItem(item.id)}
-            color="red"
-            radius="xs"
-            size="xs"
-          >
-            Delete Item
-          </Button>
-          <hr />
-        </div>
-      ))}
+      <List list={currentItems} toggleComplete={toggleComplete} deleteItem={deleteItem} />
+
+      <Pagination 
+        total={list.length}
+        perPage={itemsPerPage}
+        initialPage={1}
+        color="teal"
+        onChange={paginate}
+      />
     </>
   );
 };
