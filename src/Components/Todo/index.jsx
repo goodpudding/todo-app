@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import useForm from "../../hooks/form";
-import { Button, TextInput, Pagination } from "@mantine/core";
+import { Button, TextInput, Pagination, Paper } from "@mantine/core";
 import { v4 as uuid } from "uuid";
 import { SettingsContext } from "../../Context/Settings";
 
@@ -82,6 +82,8 @@ const Todo = () => {
     <>
       <div id="todoAreaDiv">
         <div id="formDiv">
+        <Paper shadow="xs" p="sm" withBorder>
+
           <title data-testid="todo-title">
             <h1 data-testid="todo-h1">
               To Do List: {incomplete} items pending
@@ -131,6 +133,7 @@ const Todo = () => {
               </Button>
             </label>
           </form>
+          </Paper>
         </div>
         <div id="listDiv">
           <List
