@@ -4,10 +4,13 @@ export const SettingsContext = React.createContext();
 
 function SettingsProvider({ children }) {
 
-  const [url, setUrl] = React.useState('http://MyAwesomeSite.com');
+  const [itemsToDisplay, setItemsToDisplay] = React.useState(3);
+  const [hideCompleted, setHideCompleted] = React.useState(true);
+  const [sort, setSort] = React.useState('dificulty');
+
 
   return (
-    <SettingsContext.Provider value={{ url }}>
+    <SettingsContext.Provider value={{ itemsToDisplay, hideCompleted, sort }}>
       {children}
     </SettingsContext.Provider>
   )
