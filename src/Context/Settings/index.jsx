@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState, useContext, createContext } from 'react';
 
-export const SettingsContext = React.createContext();
+export const SettingsContext = createContext();
+
+export function useSettings() {
+  return useContext(SettingsContext);
+}
 
 function SettingsProvider({ children }) {
+  const [settings, setSettings] = useState({
+    itemsToDisplay: 3,
+    hideCompleted: true,
+    sort: 'difficulty',
+  });
 
-  const [itemsToDisplay, setItemsToDisplay] = React.useState(3);
-  const [hideCompleted, setHideCompleted] = React.useState(true);
-  const [sort, setSort] = React.useState('dificulty');
-
+  const updateSettings = (newSettings) => {
+    setSettings(prevSettings => ({
+      ...prevSettings,
+      ...newSettings,
+    }));
+  };
 
   return (
-    <SettingsContext.Provider value={{ itemsToDisplay, hideCompleted, sort }}>
+    <SettingsContext.Provider value={{ settings, updateSettings }}>
       {children}
     </SettingsContext.Provider>
   )
