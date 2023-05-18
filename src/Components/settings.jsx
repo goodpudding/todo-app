@@ -1,16 +1,16 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import Settings from './Settings';
+import SettingsComponent from './Settings';
 
-function Home() {
+function PageSettings() {
   return (
     <>
       <Header />
-      <Settings />
+      <SettingsComponent />
       <Footer />
     </>
   );
 }
 
-export default Home;
+export default PageSettings;

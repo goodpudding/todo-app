@@ -7,7 +7,7 @@ import { SettingsContext } from "../../Context/Settings";
 import List from "../List/index";
 
 const Todo = () => {
-  const settings = useContext(SettingsContext);
+  const { settings } = useContext(SettingsContext);
   const [defaultValues] = useState({ difficulty: 4 });
   const [list, setList] = useState([]);
   const [currentPosition, setCurrentPosition] = useState(1);
@@ -42,6 +42,9 @@ const Todo = () => {
     setList(items);
   }
 
+/**
+ * This function toggles the completion status of an item in a list based on its ID.
+ */
   function toggleComplete(id) {
     const items = list.map((item) => {
       if (item.id === id) {
@@ -61,79 +64,95 @@ const Todo = () => {
     // disable code used to avoid linter warning
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
-  const [incompleteItems, setIncompleteItems] = useState([]);
+  
+  const [displayedItems, setDisplayedItems] = useState([]);
 
   useEffect(() => {
-    setIncompleteItems(list.filter((item) => !item.complete));
-  }, [list]);
-  const sortedItems = [...incompleteItems].sort(
+    if (settings.hideCompleted) { // if showCompleted is true, show all items
+      setDisplayedItems(list);
+    } else { // if showCompleted is false, hide completed items
+      setDisplayedItems(list.filter((item) => !item.complete));
+    }
+  }, [list, settings.hideCompleted]);
+  const sortedItems = [...displayedItems].sort(
     (a, b) => b.difficulty - a.difficulty
   );
 
   return (
     <>
-      <header data-testid="todo-header">
-        <h1 data-testid="todo-h1">To Do List: {incomplete} items pending</h1>
-      </header>
+      <div id="todoAreaDiv">
+        <div id="formDiv">
+          <title data-testid="todo-title">
+            <h1 data-testid="todo-h1">
+              To Do List: {incomplete} items pending
+            </h1>
+          </title>
 
-      <form onSubmit={handleSubmit}>
-        <h2>Add To Do Item</h2>
-        <TextInput
-          onChange={handleChange}
-          name="text"
-          type="text"
-          placeholder="Item Details"
-          label="To Do Item"
-          description="Enter in an item you want to add to your todo list"
-          radius="lg"
-          size="md"
-          withAsterisk
-        />
+          <form onSubmit={handleSubmit}>
+            <h2>Add To Do Item</h2>
+            <TextInput
+              onChange={handleChange}
+              name="text"
+              type="text"
+              placeholder="Item Details"
+              label="To Do Item"
+              description="Enter in an item you want to add to your todo list"
+              radius="lg"
+              size="md"
+              withAsterisk
+            />
 
-        <TextInput
-          placeholder="Assignee Name"
-          label="Assigned To"
-          description="Who do you want to assign this task to?"
-          radius="lg"
-          size="md"
-          withAsterisk
-          name="assignee"
-          onChange={handleChange} // Add this line
-        />
+            <TextInput
+              placeholder="Assignee Name"
+              label="Assigned To"
+              description="Who do you want to assign this task to?"
+              radius="lg"
+              size="md"
+              withAsterisk
+              name="assignee"
+              onChange={handleChange} // Add this line
+            />
 
-        <label>
-          <span>Difficulty</span>
-          <input
-            onChange={handleChange}
-            defaultValue={defaultValues.difficulty}
-            type="range"
-            min={1}
-            max={5}
-            name="difficulty"
+            <label>
+              <span>Difficulty</span>
+              <input
+                onChange={handleChange}
+                defaultValue={defaultValues.difficulty}
+                type="range"
+                min={1}
+                max={5}
+                name="difficulty"
+              />
+            </label>
+
+            <label>
+              <Button type="submit" color="teal" radius="md" size="lg">
+                Add Item
+              </Button>
+            </label>
+          </form>
+        </div>
+        <div id="listDiv">
+          <List
+            list={paginate(
+              sortedItems,
+              currentPosition,
+              settings.itemsToDisplay
+            )}
+            toggleComplete={toggleComplete}
+            deleteItem={deleteItem}
           />
-        </label>
+        </div>
+        </div>
+        <Pagination id="pagination"
+  onChange={(page) => setCurrentPosition(page)}
+  total={Math.ceil(displayedItems.length / settings.itemsToDisplay)}
+  color="indigo"
+  size="lg"
+  radius="md"
+  initialpage={currentPosition}
+/>
 
-        <label>
-          <Button type="submit" color="teal" radius="md" size="lg">
-            Add Item
-          </Button>
-        </label>
-      </form>
-
-      <List
-        list={paginate(sortedItems, currentPosition, settings.itemsToDisplay)}
-        toggleComplete={toggleComplete}
-        deleteItem={deleteItem}
-      />
-
-      <Pagination
-        onChange={(page) => setCurrentPosition(page)}
-        total={Math.ceil(sortedItems.length / settings.itemsToDisplay)}
-        color="indigo"
-        size="lg"
-        radius="md"
-        initialPage={currentPosition}
-      />
     </>
   );
 };

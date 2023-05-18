@@ -1,0 +1,39 @@
+#todoHome{
+  margin: 0% 10%;
+  /* border: 2px black solid; */
+}
+
+#todoArea{
+  margin: 0% 3%;
+  /* border: 2px black solid; */
+}
+
+#todoAreaDiv{
+  margin: 0% 3%;
+  /* border: 2px black solid; */
+  display: inline-block;
+  width: 90%;
+
+}
+#formDiv{
+  min-width: 20%;
+  max-width: 30%;
+  /* border: 2px black solid; */
+  display: inline-block;
+  background-color: rgb(194, 158, 228);
+}
+#listDiv{
+  /* border: 2px black solid; */
+  min-width: 60%;
+  max-width: 60%;
+  float: right;
+  background-color: cornflowerblue;
+}
+#pagination{
+  float: right;
+}
+
+.listItem{
+  margin: 00% 10%;
+  background-color: aqua;
+}

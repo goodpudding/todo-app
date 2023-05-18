@@ -5,11 +5,13 @@ import Todo from './Todo';
 
 function Home() {
   return (
-    <>
+    <div id = "todoHome">
       <Header />
+      <div id = "todoArea">
       <Todo />
+      </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

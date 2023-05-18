@@ -4,7 +4,8 @@ import ThemeProvider from "./Context/theme";
 import SettingsProvider from "./Context/Settings";
 import { MantineProvider } from "@mantine/core";
 import Home from "./Components/home";
-import Settings from "./Components/Settings";
+import PageSettings from "./Components/settings";
+import './App.css'
 
 function App() {
   return (
@@ -12,22 +13,19 @@ function App() {
       <ThemeProvider>
         <SettingsProvider>
           <div className="App">
-          {/* <ul className="Nav-header">
+          <BrowserRouter>
+          <ul className="Nav-header">
               <li>
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about">About Us</Link>
+                <Link to="/settings">Settings</Link>
               </li>
-              <li>
-                <Link to="/contact">Contact Us</Link>
-              </li>
-            </ul> */}
-          <BrowserRouter>
+            </ul>
           
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="settings" element={<Settings />} />
+              <Route path="settings" element={<PageSettings />} />
             </Routes>
           </BrowserRouter>
           </div>

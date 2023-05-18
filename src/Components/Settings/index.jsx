@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSettings } from '../../Context/Settings';
-import { Button, TextInput } from '@mantine/core';
+import { Button, TextInput, Checkbox } from '@mantine/core';
 
-function Settings() {
-  const { settings, setSettings } = useSettings();
+function SettingsComponent() {
+  const { settings, updateSettings } = useSettings();
 
   const handleChange = (e) => {
-    setSettings({
-      ...settings,
-      [e.target.name]: e.target.value,
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    updateSettings({
+      [e.target.name]: value,
     });
   };
 
@@ -16,22 +16,27 @@ function Settings() {
     <div>
       <h1>Settings</h1>
       <TextInput
-        label="User Name"
-        placeholder="Enter your name"
-        value={settings.userName}
+        label="How many tasks per page would you like to display?"
+        type="number"
+        value={settings.itemsToDisplay}
         onChange={handleChange}
-        name="userName"
+        name="itemsToDisplay"
+      />
+      <Checkbox
+        label="Show Completed Items"
+        checked={settings.hideCompleted}
+        onChange={handleChange}
+        name="hideCompleted"
       />
       <TextInput
-        label="Email"
-        placeholder="Enter your email"
-        value={settings.email}
+        label="Sort by"
+        value={settings.sort}
         onChange={handleChange}
-        name="email"
+        name="sort"
       />
       <Button onClick={() => alert('Settings Saved!')}>Save Settings</Button>
     </div>
   );
 }
 
-export default Settings;
+export default SettingsComponent;
