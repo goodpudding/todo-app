@@ -25,7 +25,7 @@ function App() {
           
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="settings" element={<PageSettings />} />
+              <Route path="/settings" element={<PageSettings />} />
             </Routes>
           </BrowserRouter>
           </div>
