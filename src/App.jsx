@@ -5,14 +5,21 @@ import SettingsProvider from "./Context/Settings";
 import { MantineProvider } from "@mantine/core";
 import Home from "./Components/home";
 import PageSettings from "./Components/settings";
+import AuthProvider from './Context/auth';
+import Login from './Context/auth/Login';
+import Auth from './Context/auth/Auth';
 import './App.css'
 
 function App() {
   return (
+    <AuthProvider>
     <MantineProvider>
       <ThemeProvider>
         <SettingsProvider>
           <div className="App">
+          <Login /> 
+          <Auth capability='read'>
+
           <BrowserRouter>
           <ul className="Nav-header">
               <li>
@@ -28,10 +35,12 @@ function App() {
               <Route path="/settings" element={<PageSettings />} />
             </Routes>
           </BrowserRouter>
+          </Auth>
           </div>
         </SettingsProvider>
       </ThemeProvider>
     </MantineProvider>
+    </AuthProvider>
   );
 }
 
