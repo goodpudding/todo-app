@@ -24,9 +24,9 @@ function SettingsComponent() {
       />
       <Checkbox
         label="Show Completed Items"
-        checked={settings.hideCompleted}
+        checked={settings.showCompleted} // changed from settings.hideCompleted
         onChange={handleChange}
-        name="hideCompleted"
+        name="showCompleted" // changed from name="hideCompleted"
       />
       <TextInput
         label="Sort by"

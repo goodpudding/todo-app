@@ -9,31 +9,37 @@
 }
 
 #todoAreaDiv{
-  margin: 0% 3%;
+  /* margin: 0% 3%; */
   /* border: 2px black solid; */
   display: inline-block;
-  width: 90%;
+  width: 100%;
 
 }
 #formDiv{
+  padding-top: 5%;
   min-width: 20%;
-  max-width: 30%;
+  max-width: 40%;
   /* border: 2px black solid; */
   display: inline-block;
-  background-color: rgb(194, 158, 228);
 }
 #listDiv{
   /* border: 2px black solid; */
   min-width: 60%;
   max-width: 60%;
   float: right;
-  background-color: cornflowerblue;
 }
 #pagination{
   float: right;
+  padding-top: 5%;
+  padding-right: 20%;
+
 }
 
 .listItem{
   margin: 00% 10%;
-  background-color: aqua;
+  
+  & .buttons{
+  display: flex;
+  justify-content: space-between;
+  }
 }

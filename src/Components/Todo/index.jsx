@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import useForm from "../../hooks/form";
-import { Button, TextInput, Pagination } from "@mantine/core";
+import { Button, TextInput, Pagination, Paper } from "@mantine/core";
 import { v4 as uuid } from "uuid";
 import { SettingsContext } from "../../Context/Settings";
 
@@ -11,7 +11,7 @@ const Todo = () => {
   const [defaultValues] = useState({ difficulty: 4 });
   const [list, setList] = useState([]);
   const [currentPosition, setCurrentPosition] = useState(1);
-  const [incomplete, setIncomplete] = useState([]);
+  const [incomplete, setIncomplete] = useState(0);
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
 
   const paginate = (items, page, itemsPerPage) => {
@@ -23,8 +23,9 @@ const Todo = () => {
   };
 
   const increasePagination = () => {
-    setCurrentPosition(currentPosition + settings.itemsToDisplay);
+    setCurrentPosition(currentPosition + 1); // increase by 1
   };
+  
 
   const calculateTotal = () => {
     return Math.ceil(list.length / settings.itemsToDisplay);
@@ -60,20 +61,18 @@ const Todo = () => {
     let incompleteCount = list.filter((item) => !item.complete).length;
     setIncomplete(incompleteCount);
     document.title = `To Do List: ${incomplete}`;
-    // linter will want 'incomplete' added to dependency array unnecessarily.
-    // disable code used to avoid linter warning
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
   
   const [displayedItems, setDisplayedItems] = useState([]);
 
   useEffect(() => {
-    if (settings.hideCompleted) { // if showCompleted is true, show all items
-      setDisplayedItems(list);
-    } else { // if showCompleted is false, hide completed items
-      setDisplayedItems(list.filter((item) => !item.complete));
-    }
-  }, [list, settings.hideCompleted]);
+    const newDisplayedItems = settings.showCompleted ? list : list.filter((item) => !item.complete);
+    setDisplayedItems(newDisplayedItems);
+  }, [list, settings.showCompleted, settings.itemsToDisplay, currentPosition]);
+
+  
+  
+
   const sortedItems = [...displayedItems].sort(
     (a, b) => b.difficulty - a.difficulty
   );
@@ -82,6 +81,8 @@ const Todo = () => {
     <>
       <div id="todoAreaDiv">
         <div id="formDiv">
+        <Paper shadow="xs" p="sm" withBorder>
+
           <title data-testid="todo-title">
             <h1 data-testid="todo-h1">
               To Do List: {incomplete} items pending
@@ -131,6 +132,7 @@ const Todo = () => {
               </Button>
             </label>
           </form>
+          </Paper>
         </div>
         <div id="listDiv">
           <List
@@ -144,14 +146,17 @@ const Todo = () => {
           />
         </div>
         </div>
-        <Pagination id="pagination"
+        <Pagination 
+  id="pagination"
   onChange={(page) => setCurrentPosition(page)}
   total={Math.ceil(displayedItems.length / settings.itemsToDisplay)}
   color="indigo"
   size="lg"
   radius="md"
-  initialpage={currentPosition}
+  page={currentPosition}
 />
+
+
 
     </>
   );

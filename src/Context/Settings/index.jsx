@@ -9,9 +9,10 @@ export function useSettings() {
 function SettingsProvider({ children }) {
   const initialSettings = JSON.parse(localStorage.getItem('settings')) || {
     itemsToDisplay: 3,
-    hideCompleted: true,
+    showCompleted: false,  // make sure showCompleted is always defined
     sort: 'difficulty',
   };
+  
   
   const [settings, setSettings] = useState(initialSettings);
 
@@ -23,8 +24,10 @@ function SettingsProvider({ children }) {
   };
 
   useEffect(() => {
+    console.log(settings);  // Debug line to print settings whenever they change
     localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
+
 
   return (
     <SettingsContext.Provider value={{ settings, updateSettings }}>
